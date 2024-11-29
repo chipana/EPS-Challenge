@@ -1,0 +1,16 @@
+services:
+  eps.challenge:
+    image: ${DOCKER_REGISTRY-}epschallenge
+    container_name: EPS.Challenge
+    user: root
+    build:
+      context: .
+      dockerfile: EPS.Challenge/Dockerfile
+    ports:
+     - "8080:8080"
+     - "8081:8081"
+    volumes:
+     - sqlite-data:/app/Data/
+  
+volumes:
+  sqlite-data:

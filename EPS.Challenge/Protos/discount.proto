@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "EPS.Challenge";
+
+service Discount {
+  rpc GenerateCodes (GenerateRequest) returns (GenerateResponse);
+  rpc UseCode (UseCodeRequest) returns (UseCodeResponse);
+}
+
+message GenerateRequest {
+  int32 count = 1;
+  int32 length = 2;
+}
+
+message GenerateResponse {
+  bool result = 1;
+  repeated string codes = 2;
+}
+
+message UseCodeRequest {
+  string code = 1;
+}
+
+/* Values:
+	0: Success
+	1: Used
+	2: Not found
+*/
+message UseCodeResponse {
+  int32 result = 1; 
+}
