@@ -1,4 +1,9 @@
 # EPS Challenge
+## Instructions
+**Requires docker desktop installed**
+
+This system was created using docker-compose, so you don't need to do any extra configuration (I hope :D) to run this project.
+## Challenge details
 ### Tools and environment
 The task requires knowledge of C# programming language. It is up to candidate to decide how to provide the task deliverables and instructions on how to run the code (if it is necessary).
 ### System description and requirements
@@ -19,4 +24,4 @@ consist of:
 - System must be capable of processing multiple requests in parallel.
 - Unit tests (optional).
 ### Protocol
-Do not use WEB APIs (REST) for this task. Everything else is allowed for example TCP sockets, websockets,SignalR, gRPC etc.
+Do not use WEB APIs (REST) for this task. Everything else is allowed for example TCP sockets, websockets,SignalR, gRPC etc.

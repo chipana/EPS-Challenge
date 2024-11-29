@@ -1,11 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPS.Challenge", "EPS.Challenge\EPS.Challenge.csproj", "{0445123F-7305-4A73-B802-C35AFC3671C2}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{89A59D09-7734-4F12-B694-299009842D75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External files", "External files", "{381848C5-A4A7-4DAB-9327-19D48C117B00}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1F145788-5F1D-4565-8707-0283D3A9A3E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPS.Challenge.Tests", "EPS.Challenge.Tests\EPS.Challenge.Tests.csproj", "{ACC5B637-C632-4522-96A1-61C4B81B626C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0445123F-7305-4A73-B802-C35AFC3671C2} = {0445123F-7305-4A73-B802-C35AFC3671C2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +34,15 @@ Global
 		{89A59D09-7734-4F12-B694-299009842D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89A59D09-7734-4F12-B694-299009842D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89A59D09-7734-4F12-B694-299009842D75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACC5B637-C632-4522-96A1-61C4B81B626C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACC5B637-C632-4522-96A1-61C4B81B626C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACC5B637-C632-4522-96A1-61C4B81B626C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACC5B637-C632-4522-96A1-61C4B81B626C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ACC5B637-C632-4522-96A1-61C4B81B626C} = {1F145788-5F1D-4565-8707-0283D3A9A3E2}
 	EndGlobalSection
 EndGlobal

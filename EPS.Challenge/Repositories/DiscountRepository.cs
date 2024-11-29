@@ -1,12 +1,14 @@
 ﻿using System.Collections.Concurrent;
+using EPS.Challenge.Model;
+using EPS.Challenge.Repositories.Interfaces;
 using Microsoft.Data.Sqlite;
 
 namespace EPS.Challenge.Repositories
 {
-    public class DiscountRepository
+    public class DiscountRepository : IDiscountRepository
     {
         private const string DbPath = "Data Source=/app/Data/discount.db";
-        private static readonly ConcurrentDictionary<string, bool> ActiveCodes = new();
+        private static readonly ConcurrentDictionary<string, DiscountCode> ActiveCodes = new();
 
         public DiscountRepository()
         {
@@ -35,12 +37,14 @@ namespace EPS.Challenge.Repositories
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                ActiveCodes[reader.GetString(0)] = reader.GetInt32(1) == 1;
+                ActiveCodes[reader.GetString(0)] =  new DiscountCode { Code = reader.GetString(0), IsUsed = reader.GetInt32(1) == 1 };
             }
         }
 
         public bool SaveCodeToDatabase(string code)
         {
+            ActiveCodes.TryAdd(code, new DiscountCode { Code = code, IsUsed = false});
+
             using var connection = new SqliteConnection(DbPath);
             connection.Open();
             using var command = connection.CreateCommand();
@@ -48,8 +52,10 @@ namespace EPS.Challenge.Repositories
             command.Parameters.AddWithValue("@Code", code);
             return command.ExecuteNonQuery() > 0;
         }
-        public bool MarkCodeAsUsedInDatabase(string code)
+        public bool MarkCodeAsUsed(string code)
         {
+            ActiveCodes[code].IsUsed = true;
+
             using var connection = new SqliteConnection(DbPath);
             connection.Open();
             using var command = connection.CreateCommand();
@@ -58,8 +64,6 @@ namespace EPS.Challenge.Repositories
             return command.ExecuteNonQuery() > 0;
         }
 
-        public bool GetActiveCode(string code, out bool isUsed) => ActiveCodes.TryGetValue(code, out isUsed);
-        public bool AddActiveCode(string code) => ActiveCodes.TryAdd(code, false);
-        public void SetCodeAsUsed(string code) => ActiveCodes[code] = true;
+        public DiscountCode? GetActiveCode(string code) => ActiveCodes.GetValueOrDefault(code);
     }
 }

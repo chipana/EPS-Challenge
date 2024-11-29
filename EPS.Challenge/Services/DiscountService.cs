@@ -1,12 +1,14 @@
-﻿using EPS.Challenge.Repositories;
+﻿using EPS.Challenge.Repositories.Interfaces;
+using EPS.Challenge.Services.Interfaces;
+using EPS.Challenge.Model;
 using Grpc.Core;
 
 namespace EPS.Challenge.Services
 {
-    public class DiscountService : Discount.DiscountBase
+    public class DiscountService : Discount.DiscountBase, IDiscountService
     {
-        private readonly DiscountRepository _discountRepository;
-        public DiscountService(DiscountRepository discountRepository)
+        private readonly IDiscountRepository _discountRepository;
+        public DiscountService(IDiscountRepository discountRepository)
         {
             _discountRepository = discountRepository;
         }
@@ -23,11 +25,8 @@ namespace EPS.Challenge.Services
             for (var i = 0; i < request.Count; i++)
             {
                 var code = GenerateRandomCode(request.Length, random);
-                if (_discountRepository.AddActiveCode(code))
-                {
+                if (_discountRepository.SaveCodeToDatabase(code))
                     newCodes.Add(code);
-                    _discountRepository.SaveCodeToDatabase(code);
-                }
             }
 
             return Task.FromResult(new GenerateResponse { Result = true, Codes = { newCodes } });
@@ -35,15 +34,15 @@ namespace EPS.Challenge.Services
 
         public override Task<UseCodeResponse> UseCode(UseCodeRequest request, ServerCallContext context)
         {
-            if (_discountRepository.GetActiveCode(request.Code, out var isUsed))
+            var discountCode = _discountRepository.GetActiveCode(request.Code);
+            if (discountCode != null)
             {
-                if (isUsed)
+                if (discountCode.IsUsed)
                 {
                     return Task.FromResult(new UseCodeResponse { Result = 1 }); // Already used
                 }
 
-                _discountRepository.SetCodeAsUsed(request.Code);
-                _discountRepository.MarkCodeAsUsedInDatabase(request.Code);
+                _discountRepository.MarkCodeAsUsed(request.Code);
                 return Task.FromResult(new UseCodeResponse { Result = 0 }); // Success
             }
 
